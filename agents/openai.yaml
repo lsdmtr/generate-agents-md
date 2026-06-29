@@ -1,0 +1,4 @@
+interface:
+  display_name: "Generate AGENTS.md"
+  short_description: "Generate or revise project agent rules"
+  default_prompt: "Use $generate-agents-md to create or revise a project-wide AGENTS.md or equivalent agent instruction file for this repository."
