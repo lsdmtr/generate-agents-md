@@ -11,6 +11,7 @@ Before writing, inspect:
 - Manifests and tooling: `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, Gradle, Xcode, Makefile, Docker, CI.
 - Source shape: entrypoints, public exports, services, components, adapters, tests, scripts, generated files.
 - Verification path: install, lint, format, typecheck, test, build, e2e, emulator/simulator/container requirements.
+- Changelog convention for the generated `AGENTS.md`: whether root `CHANGELOG.md` exists, what entry style it uses, which user-facing changes must be recorded there, and what to say if the repo has no changelog workflow yet.
 
 ## Profile Selection
 
@@ -50,7 +51,7 @@ Include a numbered workflow:
 5. Update design and interface docs when behavior or contracts change.
 6. Add tests or fixtures before implementation when logic changes.
 7. Implement in the correct module.
-8. Sync comments, examples, docs, and public surfaces.
+8. Sync comments, examples, docs, public surfaces, and root `CHANGELOG.md` when the change is user-facing or contract-affecting and the repo has a changelog workflow.
 9. Run repo-standard verification.
 10. Report changed files, proof commands, and known gaps.
 
@@ -195,7 +196,9 @@ If a repo has no meaningful import/export convention, state the actual public su
 
 State which external SDKs, services, generated clients, platform APIs, or infrastructure modules should be consumed rather than reimplemented. Legacy or wire-format compatibility belongs in adapters/normalizers, not broad public surfaces.
 
-### Documentation and Comments
+### Documentation, Changelog, and Comments
+
+The generated `AGENTS.md` must include a clear changelog rule for the target project, not merely this skill repository. When root `CHANGELOG.md` exists or the user asks for changelog coverage, tell agents to record concrete user-facing changes in root `CHANGELOG.md`, not in README or other overview docs. Changelog updates are expected for behavior changes, public API or CLI changes, migrations, compatibility changes, and user-visible documentation changes. Keep entries factual and outcome-focused; do not write release-bound prohibitions such as "version X must not do Y". If no root `CHANGELOG.md` exists, the generated `AGENTS.md` should say not to invent one without user or repository evidence.
 
 Require structured comments for public APIs, complex helpers, adapters, mappings, error semantics, platform differences, and non-obvious decisions. Include good and bad examples tailored to the language.
 
