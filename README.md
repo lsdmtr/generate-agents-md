@@ -123,19 +123,21 @@ The skill guides Codex through this order:
 
 1. Ask which user-facing language to use if the user has not already specified it.
 2. Inspect existing `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, project docs, requirements, source layout, tests, scripts, manifests, CI, and verification commands.
-3. Identify repository facts: stack, runtime, package manager, framework, formatter, linter, test runner, build path, deployment path, boundaries, and risk areas.
-4. Classify the repository into a profile.
-5. Ask only for non-discoverable intent, such as whether strict docs-before-code or container-only verification is desired.
-6. Generate or revise the instruction file using the bundled blueprint.
-7. Validate the generated file with the bundled script and repo-appropriate checks.
+3. If the repository is empty or has no meaningful project files, ask the user for the intended project type, technology stack, structure, documentation rules, changelog policy, verification commands, delivery constraints, and coding conventions before generating anything.
+4. Identify repository facts: stack, runtime, package manager, framework, formatter, linter, test runner, build path, deployment path, boundaries, and risk areas.
+5. Classify the repository into a profile.
+6. Ask only for non-discoverable intent, such as whether strict docs-before-code or container-only verification is desired.
+7. Generate or revise the instruction file using the bundled blueprint.
+8. Validate the generated file with the bundled script and repo-appropriate checks.
 
 1. 如果用户没有指定语言，先询问后续提示和生成文档使用中文还是英文。
 2. 检查已有 `AGENTS.md`、`CLAUDE.md`、`GEMINI.md`、项目文档、需求目录、源码结构、测试、脚本、工程配置、CI 和验证命令。
-3. 识别仓库事实：技术栈、运行时、包管理器、框架、格式化工具、lint、测试框架、构建路径、部署路径、工作边界和风险点。
-4. 将仓库归类到合适 profile。
-5. 只询问无法从仓库推导出的意图，例如是否要求严格文档先行、TDD 或只允许容器内验证。
-6. 使用内置蓝图生成或修订规范文件。
-7. 使用内置脚本和仓库自身检查命令校验结果。
+3. 如果仓库为空或没有有意义的项目文件，先向用户问清项目类型、技术栈、目录结构、文档规则、changelog 策略、验证命令、交付约束和编码规范，再开始生成。
+4. 识别仓库事实：技术栈、运行时、包管理器、框架、格式化工具、lint、测试框架、构建路径、部署路径、工作边界和风险点。
+5. 将仓库归类到合适 profile。
+6. 只询问无法从仓库推导出的意图，例如是否要求严格文档先行、TDD 或只允许容器内验证。
+7. 使用内置蓝图生成或修订规范文件。
+8. 使用内置脚本和仓库自身检查命令校验结果。
 
 ## Profiles / 规范强度档位
 
@@ -409,4 +411,3 @@ When changing the skill:
 - 当 skill 用途或触发范围变化时，同步更新 `agents/openai.yaml`。
 - 具体发布历史写入 `CHANGELOG.md`，不要放进 README。
 - 避免写入项目专属名称、路径或临时迁移口径。
-

@@ -4,6 +4,7 @@ All notable user-facing changes to this skill are documented here.
 
 ## Unreleased
 
+- Added an explicit empty-repository gate requiring Codex to ask about project type, technology stack, structure, documentation, changelog, verification, delivery, and coding conventions before generating instructions.
 - Added guidance that concrete change history belongs in the repository-root `CHANGELOG.md`, while README should stay focused on stable usage and maintenance documentation.
 - Updated the skill workflow to inspect and preserve changelog conventions, and to include changelog update rules when generating repository-level agent instructions.
 - Clarified that generated project `AGENTS.md` files must explicitly include the changelog rule when a repository uses root `CHANGELOG.md`.

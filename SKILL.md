@@ -20,12 +20,18 @@ Generate a durable, project-level `AGENTS.md` from repository facts. The output 
    - Manifests and tooling: package/build/test configs, lockfiles, CI, Makefiles, workspace files.
    - Source layout, tests, docs, root `CHANGELOG.md` if present, requirements/spec folders, examples, scripts, deployment config.
    - Existing public APIs, app entrypoints, module boundaries, import/export style, comments, and verification commands.
-3. Identify project facts:
+3. If the repository has no discoverable project facts, stop and ask for intent before generating:
+   - Treat the target as empty when inspection finds only `.git`, placeholder files, or no meaningful manifests, source, tests, docs, instructions, CI, scripts, requirements, or changelog.
+   - Ask the user to define the intended project type/profile, technology stack, runtime, package manager, framework, entrypoints, expected commands, source/test/docs layout, requirements workflow, design/interface documentation expectations, changelog policy, verification path, deployment/release constraints, edit boundaries, read-only references, coding/comment style, and any examples or conventions to follow.
+   - Ask in one concise but comprehensive prompt, then wait for enough answers to identify the stack, profile, workflow, boundaries, and verification expectations.
+   - Do not generate `AGENTS.md`, choose a strict profile, scaffold project files, or invent commands, formal docs, package APIs, CI, or changelog behavior from an empty repository.
+   - If the user explicitly asks for a minimal placeholder despite missing facts, generate only a provisional `light` profile file that says future agents must confirm project facts before introducing tooling or process.
+4. Identify project facts:
    - Tech stack or stacks, runtime, package manager, framework, test runner, formatter/linter, build/deploy path.
    - What can be edited directly and what is read-only reference.
    - Requirements/spec workflow, changelog workflow, and where design/interface docs belong.
    - Source ownership boundaries and recurring risk areas.
-4. Classify the repository before choosing strictness:
+5. Classify the repository before choosing strictness:
    - `full`: mature product, SDK, platform, or service repo with durable docs and public contracts.
    - `sdk`: library/package repos where exports, adapters, examples, and package surface are the main risk.
    - `app`: frontend, mobile, desktop, or full-stack app where user flows, UI states, platform checks, and assets matter.
@@ -34,21 +40,21 @@ Generate a durable, project-level `AGENTS.md` from repository facts. The output 
    - `data`: scripts, notebooks, ETL, analytics, or ML repos where reproducibility and input/output contracts matter.
    - `infra`: IaC, deployment, CI/CD, or operations repos where state, secrets, plan/apply, rollback, and environment safety matter.
    - `light`: small scripts, examples, docs-only, or config repos where heavyweight design/interface docs would be invented.
-5. Ask only for other non-discoverable intent:
+6. Ask only for other non-discoverable intent:
    - Whether the user wants strict docs-before-code, TDD, container-only verification, or lighter rules when not obvious from repo/context.
-6. Generate or revise the target instruction file using the blueprint in `references/agents-md-blueprint.md`.
+7. Generate or revise the target instruction file using the blueprint in `references/agents-md-blueprint.md`.
    - Preserve existing durable project rules unless they conflict with discovered project facts or the user's request.
    - Do not replace project-specific rules with generic boilerplate.
    - Do not invent design docs, interface docs, changelog formats, commands, package managers, CI, or public APIs that the repo does not support.
-7. Keep the result project-wide:
+8. Keep the result project-wide:
    - Do not hard-code one ticket, version, milestone, temporary transition, or temporary plan as the project norm.
    - Mention a specific requirements path only as a general convention or when the repo itself defines it as a durable workflow.
    - The generated target-project `AGENTS.md` must include a clear changelog rule, not just this skill repository's own `CHANGELOG.md`.
    - Direct release notes and concrete change history to the repository-root `CHANGELOG.md`; if no root changelog exists, state that agents must not invent a changelog workflow without user or repo evidence.
    - Do not put change history in README-style overview docs, and do not record rules framed as "version X should not do Y"; express durable policy without tying it to a release.
-8. Include concrete good and bad examples for fragile conventions:
+9. Include concrete good and bad examples for fragile conventions:
    - Choose examples that match the repo and selected profile: design docs, interface/API docs, import/export style, comments/docstrings, command verification, CLI flags, infra safety, or data reproducibility.
-9. Validate:
+10. Validate:
    - Run the bundled script from the skill folder, not from the target repository unless the script has been copied there.
    - Use `python3 <skill-folder>/scripts/validate_agents_md.py <path/to/AGENTS.md> --profile <profile>`.
    - Add `--forbid` terms for task-specific phrases that must not appear.

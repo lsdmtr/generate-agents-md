@@ -13,6 +13,21 @@ Before writing, inspect:
 - Verification path: install, lint, format, typecheck, test, build, e2e, emulator/simulator/container requirements.
 - Changelog convention for the generated `AGENTS.md`: whether root `CHANGELOG.md` exists, what entry style it uses, which user-facing changes must be recorded there, and what to say if the repo has no changelog workflow yet.
 
+## Empty Repository Gate
+
+Before choosing a profile or drafting instructions, decide whether the target repository has enough facts to support project-level rules. Treat the repo as empty when it contains only `.git`, placeholder files, or no meaningful manifests, source, tests, docs, instructions, CI, scripts, requirements, or changelog.
+
+For an empty repository, ask the user for enough detail before generating anything:
+
+- Intended project type/profile: product, SDK/library, app, backend service, CLI, data/ML, infrastructure, docs-only, or other.
+- Technology stack: language, runtime, package manager, framework, platform, database, deployment target, and required tooling.
+- Expected shape: entrypoints, source/test/docs directories, generated files, examples, assets, and read-only references.
+- Process rules: requirements/spec workflow, design notes, interface/API docs, changelog policy, release/versioning, branching, and delivery expectations.
+- Verification rules: install, format, lint, typecheck, test, build, emulator/simulator/container, CI, deployment, rollback, or manual review commands.
+- Standards: coding style, import/export or public surface rules, comments/docstrings, dependency boundaries, security/secrets policy, and examples to follow or avoid.
+
+Do not fill these gaps from the template. Do not invent commands, package managers, CI, formal design/interface docs, public APIs, or changelog behavior. If the user explicitly asks for a placeholder anyway, use a provisional `light` profile and state that future agents must confirm project facts before introducing tooling or process.
+
 ## Profile Selection
 
 Choose one validation and writing profile before drafting. The profile controls strictness; it must come from repo facts, not from the template.
