@@ -22,6 +22,7 @@ It is designed for real repositories across different technology stacks. Instead
 - [Repository Structure / 仓库结构](#repository-structure--仓库结构)
 - [Good Use Cases / 适用场景](#good-use-cases--适用场景)
 - [Limitations / 限制](#limitations--限制)
+- [Changelog / 变更记录](#changelog--变更记录)
 - [Development / 开发维护](#development--开发维护)
 
 ## What This Skill Solves / 解决什么问题
@@ -51,14 +52,14 @@ This skill helps Codex produce that kind of file by forcing a repository-first p
 - **Technology-stack aware**: Supports frontend, backend, SDK, mobile, CLI, data, infrastructure, docs, and mixed repositories.
 - **Profile based**: Uses `full`, `sdk`, `app`, `backend`, `cli`, `data`, `infra`, or `light` to avoid overfitting one project style to every repo.
 - **Bilingual first prompt**: Asks the user whether to use Chinese or English before other clarifying questions when the language is not obvious.
-- **Project-wide by default**: Prevents one ticket, version, sprint, branch, or temporary plan from becoming a permanent project rule.
+- **Project-wide by default**: Prevents one ticket, sprint, branch, or temporary plan from becoming a permanent project rule.
 - **Examples required**: Encourages concrete good and bad examples for docs, API contracts, comments, import/export rules, verification, CLI behavior, infra safety, or data reproducibility.
 - **Validation included**: Bundles a zero-dependency Python validator for structural checks and task-specific forbidden wording.
 
 - **技术栈感知**：支持前端、后端、SDK、移动端、CLI、数据、基础设施、文档和混合型仓库。
 - **按档位生成**：通过 `full`、`sdk`、`app`、`backend`、`cli`、`data`、`infra`、`light` 避免把某一种项目规范强行套到所有仓库。
 - **优先确认语言**：如果语言不明确，会先用中英双语询问用户希望使用中文还是英文。
-- **默认项目级长期规范**：避免把某个 ticket、版本、迭代、分支或临时方案写成项目常态。
+- **默认项目级长期规范**：避免把某个 ticket、迭代、分支或临时方案写成项目常态。
 - **要求示例**：鼓励对文档、接口合同、注释、import/export、验证命令、CLI 行为、基础设施安全、数据可复现等高风险规则提供合格和不合格示例。
 - **内置校验**：提供零依赖 Python 校验脚本，用于检查结构完整性和禁止出现的一次性需求措辞。
 
@@ -169,7 +170,7 @@ A generated `AGENTS.md` normally covers:
 - Coding conventions for the detected stack.
 - Import/export or equivalent public surface rules.
 - External dependency, SDK, service, platform, or infrastructure boundaries.
-- Documentation and comment rules with examples.
+- Documentation, changelog, and comment rules with examples.
 - Testing, build, lint, format, verification, and environment rules.
 - Git hygiene, delivery expectations, and final reporting rules.
 
@@ -183,13 +184,13 @@ A generated `AGENTS.md` normally covers:
 - 与当前技术栈匹配的开发规范。
 - import/export 或等价公开表面规则。
 - 外部依赖、SDK、服务、平台或基础设施边界。
-- 带示例的文档和注释规范。
+- 带示例的文档、CHANGELOG 和注释规范。
 - 测试、构建、lint、format、验证和环境规则。
 - Git 规范、交付要求和最终汇报规则。
 
-The output must stay project-wide. It should not say that one release, migration, branch, ticket, sprint, or temporary workaround is the permanent rule for the whole repository.
+The output must stay project-wide. It should not say that one migration, branch, ticket, sprint, or temporary workaround is the permanent rule for the whole repository.
 
-输出必须保持项目级长期规范视角，不应把某个版本、迁移、分支、ticket、迭代或临时方案写成整个仓库的永久规则。
+输出必须保持项目级长期规范视角，不应把某个迁移、分支、ticket、迭代或临时方案写成整个仓库的永久规则。
 
 ## Validation Script / 校验脚本
 
@@ -228,7 +229,7 @@ python3 scripts/validate_agents_md.py ./AGENTS.md --profile full --require "make
 
 # Forbid task-specific wording
 # 禁止某些一次性需求措辞
-python3 scripts/validate_agents_md.py ./AGENTS.md --profile full --forbid "release-name" --forbid-transient
+python3 scripts/validate_agents_md.py ./AGENTS.md --profile full --forbid "ticket-id" --forbid-transient
 ```
 
 Useful flags:
@@ -242,7 +243,7 @@ Useful flags:
 | `--require-regex` | Requires a regular expression match. | 要求匹配某个正则。 |
 | `--forbid` | Fails if a literal substring appears. | 如果出现某个字面字符串则失败。 |
 | `--forbid-regex` | Fails if a regular expression matches. | 如果匹配某个正则则失败。 |
-| `--forbid-transient` | Fails on common ticket, sprint, branch, version, or temporary-plan wording. | 检测常见 ticket、迭代、分支、版本或临时方案措辞。 |
+| `--forbid-transient` | Fails on common ticket, sprint, branch, or temporary-plan wording. | 检测常见 ticket、迭代、分支或临时方案措辞。 |
 | `--allow-missing` | Allows a named check to be missing when intentionally smaller. | 对有意轻量化的仓库允许缺少某个检查项。 |
 | `--alias` | Adds language-specific aliases for check names. | 为检查项补充其他语言的关键词。 |
 | `--min-units` | Overrides minimum content size. | 覆盖最小内容长度要求。 |
@@ -306,6 +307,7 @@ Use $generate-agents-md to create a lightweight AGENTS.md for this small scripts
 
 ```text
 generate-agents-md/
+├── CHANGELOG.md
 ├── SKILL.md
 ├── agents/
 │   └── openai.yaml
@@ -319,11 +321,13 @@ File responsibilities:
 
 文件职责：
 
+- `CHANGELOG.md`: User-facing change history for this skill.
 - `SKILL.md`: Main Codex skill instructions and required workflow.
 - `agents/openai.yaml`: UI metadata for Codex skill discovery.
 - `references/agents-md-blueprint.md`: Reusable section blueprint and cross-stack adaptation guidance.
 - `scripts/validate_agents_md.py`: Profile-aware validator for generated instruction files.
 
+- `CHANGELOG.md`：记录该 skill 的用户可见变更。
 - `SKILL.md`：Codex skill 主说明和必需工作流。
 - `agents/openai.yaml`：用于 Codex skill 发现和展示的 UI 元数据。
 - `references/agents-md-blueprint.md`：可复用章节蓝图和跨技术栈适配指南。
@@ -361,6 +365,12 @@ Use this skill when:
 - 如果输出不是中文或英文，而章节标题使用其他语言，校验时可通过 `--alias` 补充关键词。
 - 安装方式取决于本地 Codex 环境可用的 skill 安装工具。
 
+## Changelog / 变更记录
+
+User-facing changes are tracked in [`CHANGELOG.md`](CHANGELOG.md). Keep README focused on stable usage, installation, and maintenance guidance rather than detailed change entries.
+
+面向用户的变更记录统一维护在 [`CHANGELOG.md`](CHANGELOG.md)。README 只保留稳定的使用、安装和维护说明，不承载发布历史。
+
 ## Development / 开发维护
 
 Run these checks before publishing changes:
@@ -390,11 +400,13 @@ When changing the skill:
 - Put reusable detailed guidance in `references/`.
 - Keep deterministic checks in `scripts/`.
 - Update `agents/openai.yaml` when the skill purpose or trigger scope changes.
-- Avoid adding project-specific names, paths, release numbers, or temporary migration language.
+- Keep detailed change entries in `CHANGELOG.md`, not README.
+- Avoid adding project-specific names, paths, or temporary migration language.
 
 - `SKILL.md` 应聚焦工作流和决策路径。
 - 可复用的详细指南放到 `references/`。
 - 确定性检查逻辑放到 `scripts/`。
 - 当 skill 用途或触发范围变化时，同步更新 `agents/openai.yaml`。
-- 避免写入项目专属名称、路径、版本号或临时迁移口径。
+- 具体发布历史写入 `CHANGELOG.md`，不要放进 README。
+- 避免写入项目专属名称、路径或临时迁移口径。
 

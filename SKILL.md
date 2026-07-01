@@ -18,12 +18,12 @@ Generate a durable, project-level `AGENTS.md` from repository facts. The output 
 2. Inspect before writing:
    - Existing agent instruction files: `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`.
    - Manifests and tooling: package/build/test configs, lockfiles, CI, Makefiles, workspace files.
-   - Source layout, tests, docs, requirements/spec folders, examples, scripts, deployment config.
+   - Source layout, tests, docs, root `CHANGELOG.md` if present, requirements/spec folders, examples, scripts, deployment config.
    - Existing public APIs, app entrypoints, module boundaries, import/export style, comments, and verification commands.
 3. Identify project facts:
    - Tech stack or stacks, runtime, package manager, framework, test runner, formatter/linter, build/deploy path.
    - What can be edited directly and what is read-only reference.
-   - Requirements/spec workflow and where design/interface docs belong.
+   - Requirements/spec workflow, changelog workflow, and where design/interface docs belong.
    - Source ownership boundaries and recurring risk areas.
 4. Classify the repository before choosing strictness:
    - `full`: mature product, SDK, platform, or service repo with durable docs and public contracts.
@@ -39,10 +39,13 @@ Generate a durable, project-level `AGENTS.md` from repository facts. The output 
 6. Generate or revise the target instruction file using the blueprint in `references/agents-md-blueprint.md`.
    - Preserve existing durable project rules unless they conflict with discovered project facts or the user's request.
    - Do not replace project-specific rules with generic boilerplate.
-   - Do not invent design docs, interface docs, commands, package managers, CI, or public APIs that the repo does not support.
+   - Do not invent design docs, interface docs, changelog formats, commands, package managers, CI, or public APIs that the repo does not support.
 7. Keep the result project-wide:
    - Do not hard-code one ticket, version, milestone, temporary transition, or temporary plan as the project norm.
    - Mention a specific requirements path only as a general convention or when the repo itself defines it as a durable workflow.
+   - The generated target-project `AGENTS.md` must include a clear changelog rule, not just this skill repository's own `CHANGELOG.md`.
+   - Direct release notes and concrete change history to the repository-root `CHANGELOG.md`; if no root changelog exists, state that agents must not invent a changelog workflow without user or repo evidence.
+   - Do not put change history in README-style overview docs, and do not record rules framed as "version X should not do Y"; express durable policy without tying it to a release.
 8. Include concrete good and bad examples for fragile conventions:
    - Choose examples that match the repo and selected profile: design docs, interface/API docs, import/export style, comments/docstrings, command verification, CLI flags, infra safety, or data reproducibility.
 9. Validate:
@@ -66,9 +69,11 @@ The generated `AGENTS.md` should normally cover:
 - Coding conventions for the detected stack.
 - Import/export or public surface rules that match the detected language and packaging model.
 - External dependency, SDK, service, platform, or infrastructure boundaries.
-- Documentation and comment rules, including structured examples.
+- Documentation, changelog, and comment rules, including structured examples.
 - Testing, build, lint, format, verification, and environment rules.
 - Git hygiene, delivery expectations, and final reporting rules.
+
+Every generated project `AGENTS.md` must clearly state the changelog rule. It should direct agents to update the repository-root `CHANGELOG.md` for user-facing changes, behavior changes, public API changes, CLI changes, migrations, or user-visible documentation changes when that file exists or the user asks for changelog coverage. If no root `CHANGELOG.md` exists, the `AGENTS.md` should say not to invent one without user or repository evidence. README-style overview docs must not contain concrete change history; changelog entries stay factual and outcome-focused instead of negative per-version directives such as "this version must not ...".
 
 Do not create a shallow checklist. The file should be actionable enough that another agent can start work without asking where code belongs, which docs must change, or what proof path is expected.
 
@@ -85,7 +90,7 @@ Use the bundled `scripts/validate_agents_md.py` after writing. Resolve the path 
 ```bash
 python3 /path/to/generate-agents-md/scripts/validate_agents_md.py ./AGENTS.md --profile full
 python3 /path/to/generate-agents-md/scripts/validate_agents_md.py ./AGENTS.md --profile cli --allow-missing "design document rules"
-python3 /path/to/generate-agents-md/scripts/validate_agents_md.py ./AGENTS.md --profile sdk --forbid "release-name" --forbid-transient
+python3 /path/to/generate-agents-md/scripts/validate_agents_md.py ./AGENTS.md --profile sdk --forbid "ticket-id" --forbid-transient
 python3 /path/to/generate-agents-md/scripts/validate_agents_md.py ./AGENTS.md --profile full --require "import type" --require "design.md"
 ```
 
@@ -108,5 +113,7 @@ Restart Codex after installing.
 - Flattening a monorepo into one rule set when packages, apps, services, or languages need separate sections.
 - Using TypeScript/JSDoc examples in a Python, Go, Rust, Java, Swift, Kotlin, CLI, data, or infra repo without translating the convention.
 - Listing methods or fields without explaining source, flow, side effects, and failure semantics.
+- Putting release history in README instead of root `CHANGELOG.md` when the repo has changelog coverage.
+- Writing changelog notes as per-version prohibitions instead of factual changes.
 - Omitting examples, which leaves future agents guessing what "good documentation" means.
 - Running host-side commands when the repo requires container, simulator, remote, or CI verification.
